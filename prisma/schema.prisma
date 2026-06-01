@@ -1,0 +1,103 @@
+// prisma/schema.prisma
+
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Operator {
+  id           String     @id @default(uuid())
+  name         String
+  team         String
+  mainChannel  String     // 'chat' ou 'voice'
+  lookerId     String?    @unique
+  status       String     @default("ativo") // 'ativo', 'inativo', 'ferias'
+  notes        String?    @db.Text
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+
+  kpis         Kpi[]
+  audits       Audit[]
+  aiReports    AiReport[]
+
+  @@map("operators")
+}
+
+model Kpi {
+  id                    String   @id @default(uuid())
+  operatorId            String   @map("operator_id")
+  startDate             DateTime @map("start_date")
+  endDate               DateTime @map("end_date")
+  
+  // CSAT
+  csatGeneral           Decimal? @db.Decimal(5, 2) @map("csat_general")
+  csatChat              Decimal? @db.Decimal(5, 2) @map("csat_chat")
+  csatVoice             Decimal? @db.Decimal(5, 2) @map("csat_voice")
+  
+  // Taxa de Convencimento
+  convincementGeneral   Decimal? @db.Decimal(5, 2) @map("convincement_general")
+  convincementChat      Decimal? @db.Decimal(5, 2) @map("convincement_chat")
+  convincementVoice     Decimal? @db.Decimal(5, 2) @map("convincement_voice")
+  
+  // TMA (Armazenado em Segundos Inteiros)
+  tmaChat               Int?     @map("tma_chat")
+  tmaVoice              Int?     @map("tma_voice")
+  
+  // Short Call e Produtividade
+  shortCallChat         Int?     @map("short_call_chat")
+  shortCallVoice        Int?     @map("short_call_voice")
+  inactivityRate        Decimal? @db.Decimal(5, 2) @map("inactivity_rate")
+  breakOverflow         Int?     @map("break_overflow") 
+  
+  // Transferências
+  transferRate          Decimal? @db.Decimal(5, 2) @map("transfer_rate")
+  transferRetention     Decimal? @db.Decimal(5, 2) @map("transfer_retention")
+  
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+
+  operator              Operator @relation(fields: [operatorId], references: [id], onDelete: Cascade)
+
+  @@unique([operatorId, startDate])
+  @@map("kpis")
+}
+
+model Audit {
+  id               String   @id @default(uuid())
+  operatorId       String   @map("operator_id")
+  auditNumber      String   @unique @map("audit_number")
+  protocolNumber   String   @map("protocol_number")
+  customerContact  String   @map("customer_contact")
+  serviceChannel   String   @map("service_channel") 
+  serviceDatetime  DateTime @map("service_datetime")
+  score            Decimal  @db.Decimal(5, 2)
+  
+  auditSummary     String   @db.Text @map("audit_summary")
+  positivePoints   String   @db.Text @map("positive_points")
+  negativePoints   String   @db.Text @map("negative_points")
+  
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  operator         Operator @relation(fields: [operatorId], references: [id], onDelete: Cascade)
+
+  @@map("audits")
+}
+
+model AiReport {
+  id               String   @id @default(uuid())
+  operatorId       String   @map("operator_id")
+  periodStart      DateTime @map("period_start")
+  periodEnd        DateTime @map("period_end")
+  reportType       String   @map("report_type")
+  promptVersion    String   @map("prompt_version")
+  generatedContent Json     @map("generated_content")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  operator         Operator @relation(fields: [operatorId], references: [id], onDelete: Cascade)
+
+  @@map("ai_reports")
+}
