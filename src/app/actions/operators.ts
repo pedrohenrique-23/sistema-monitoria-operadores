@@ -51,3 +51,34 @@ export async function createOperator(data: CreateOperatorInput) {
     throw new Error('Falha ao cadastrar o operador.');
   }
 }
+
+export async function getOperatorById(id: string) {
+  try {
+    return await prisma.operator.findUnique({
+      where: { id },
+    });
+  } catch (error) {
+    console.error(`Erro ao buscar operador ${id}:`, error);
+    throw new Error('Não foi possível carregar os dados do operador.');
+  }
+}
+
+/**
+ * Atualiza o campo de observações permanentes (notes) de um operador
+ */
+export async function updateOperatorNotes(id: string, notes: string) {
+  try {
+    const updated = await prisma.operator.update({
+      where: { id },
+      data: { notes },
+    });
+
+    // Revalida os caminhos para atualizar tanto a listagem quanto o perfil
+    revalidatePath('/operadores');
+    revalidatePath(`/operadores/${id}`);
+    return updated;
+  } catch (error) {
+    console.error(`Erro ao atualizar notas do operador ${id}:`, error);
+    throw new Error('Falha ao salvar as observações.');
+  }
+}

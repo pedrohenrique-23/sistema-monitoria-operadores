@@ -1,0 +1,145 @@
+/* src/app/(dashboard)/operadores/[id]/page.module.css */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.backLink {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  transition: var(--transition-smooth);
+}
+
+.backLink:hover {
+  color: var(--color-text-primary);
+}
+
+.profileHeader {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.operatorInfo h1 {
+  font-size: 2.25rem;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.metaGrid {
+  display: flex;
+  gap: 1.5rem;
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  flex-wrap: wrap;
+}
+
+.badges {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.badge {
+  font-size: 0.85rem;
+  font-weight: bold;
+  padding: 0.4rem 1rem;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.channelChat { background-color: var(--color-channel-chat); }
+.channelVoice { background-color: var(--color-channel-voice); }
+.statusAtivo { background-color: var(--color-status-active); }
+.statusFerias { background-color: var(--color-status-vacation); }
+.statusInativo { background-color: var(--color-status-inactive); }
+
+.quickActions {
+  display: flex;
+  gap: 1rem;
+}
+
+.actionButton {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: bold;
+  color: #ffffff;
+  transition: var(--transition-smooth);
+}
+
+.btnKpi {
+  background-color: var(--color-channel-chat);
+}
+
+.btnAudit {
+  background-color: var(--color-channel-voice);
+}
+
+.actionButton:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.notesSection {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+}
+
+.notesSection h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: var(--color-text-primary);
+}
+
+.textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family);
+  font-size: 1rem;
+  resize: vertical;
+  outline: none;
+  transition: var(--transition-smooth);
+  background-color: var(--color-bg-main);
+}
+
+.textarea:focus {
+  border-color: var(--color-text-secondary);
+  background-color: #ffffff;
+}
+
+.saveButton {
+  margin-top: 1rem;
+  background-color: var(--color-status-active);
+  color: #ffffff;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-md);
+  font-weight: bold;
+  transition: var(--transition-smooth);
+}
+
+.saveButton:hover {
+  opacity: 0.9;
+}
+
+.historyPlaceholder {
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 3rem;
+  text-align: center;
+  color: var(--color-text-secondary);
+}
