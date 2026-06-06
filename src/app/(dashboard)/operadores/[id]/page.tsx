@@ -8,6 +8,7 @@ import styles from './page.module.css';
 import AiAnalysis from './AiAnalysis';
 import DeleteButton from './DeleteButton';
 import DeleteKpiButton from './DeleteKpiButton';
+import DeleteAuditButton from './DeleteAuditButton';
 
 interface PageProps {
     params: Promise<{ id: string }>;
@@ -173,6 +174,7 @@ export default async function OperadorPerfilPage({ params }: PageProps) {
                                     <th>Canal</th>
                                     <th>Nota (Score)</th>
                                     <th>Pontos Positivos / Negativos</th>
+                                    <th>Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -194,6 +196,14 @@ export default async function OperadorPerfilPage({ params }: PageProps) {
                                                 <span style={{ color: 'var(--color-status-active)' }}><strong>(+)</strong></span> {audit.positivePoints}
                                                 <br />
                                                 <span style={{ color: 'var(--color-status-inactive)' }}><strong>(-)</strong></span> {audit.negativePoints}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className={styles.tableActions}>
+                                                <Link href={`/auditorias/${audit.id}/editar`} className={styles.btnTableEdit}>
+                                                    Editar
+                                                </Link>
+                                                <DeleteAuditButton id={audit.id} />
                                             </div>
                                         </td>
                                     </tr>

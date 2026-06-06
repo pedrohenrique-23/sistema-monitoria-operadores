@@ -45,3 +45,61 @@ export async function createAudit(data: CreateAuditInput) {
     throw new Error('Failed to register the quality audit. Ensure audit number is unique.');
   }
 }
+
+export interface UpdateAuditInput {
+  id: string;
+  auditNumber: string;
+  protocolNumber: string;
+  customerContact: string;
+  serviceChannel: string;
+  serviceDatetime: string;
+  score: number;
+  auditSummary: string;
+  positivePoints: string;
+  negativePoints: string;
+}
+
+/**
+ * Atualiza uma auditoria de qualidade existente
+ */
+export async function updateAudit(data: UpdateAuditInput) {
+  try {
+    const updated = await prisma.audit.update({
+      where: { id: data.id },
+      data: {
+        auditNumber: data.auditNumber,
+        protocolNumber: data.protocolNumber,
+        customerContact: data.customerContact,
+        serviceChannel: data.serviceChannel,
+        serviceDatetime: new Date(data.serviceDatetime),
+        score: data.score,
+        auditSummary: data.auditSummary,
+        positivePoints: data.positivePoints,
+        negativePoints: data.negativePoints,
+      },
+    });
+
+    revalidatePath(`/operadores/${updated.operatorId}`);
+    return updated;
+  } catch (error) {
+    console.error('Error updating audit:', error);
+    throw new Error('Falha ao atualizar a auditoria de qualidade.');
+  }
+}
+
+/**
+ * Remove uma auditoria do banco de dados
+ */
+export async function deleteAudit(id: string) {
+  try {
+    const deleted = await prisma.audit.delete({
+      where: { id },
+    });
+
+    revalidatePath(`/operadores/${deleted.operatorId}`);
+    return deleted;
+  } catch (error) {
+    console.error('Error deleting audit:', error);
+    throw new Error('Falha ao excluir a auditoria.');
+  }
+}
