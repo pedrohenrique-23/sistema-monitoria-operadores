@@ -1,109 +1,89 @@
-// src/app/(dashboard)/auditorias/[id]/editar/page.tsx
+// src/app/(dashboard)/operadores/[id]/editar/page.tsx
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import prisma from '@/lib/prisma';
-import { updateAudit } from '@/app/actions/audits';
-import styles from '../../../operadores/[id]/nova-auditoria/page.module.css';
+import { getOperatorById, updateOperator } from '@/app/actions/operators';
+import styles from '../nova-auditoria/page.module.css'; // Reaproveitando os estilos de formulário limpos
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
-export default async function EditarAuditoriaPage({ params }: PageProps) {
+export default async function EditarOperadorPage({ params }: PageProps) {
   const resolvedParams = await params;
+  const operator = await getOperatorById(resolvedParams.id);
 
-  const audit = await prisma.audit.findUnique({
-    where: { id: resolvedParams.id },
-    include: { operator: true },
-  });
-
-  if (!audit) redirect('/operadores');
-
-  const formatDatetimeForInput = (date: Date) => {
-    return date.toISOString().slice(0, 16); // Formato YYYY-MM-DDTHH:MM exigido pelo datetime-local
-  };
+  if (!operator) {
+    redirect('/operadores');
+  }
 
   async function handleSubmit(formData: FormData) {
     'use server';
 
-    await updateAudit({
+    await updateOperator({
       id: resolvedParams.id,
-      auditNumber: formData.get('auditNumber') as string,
-      protocolNumber: formData.get('protocolNumber') as string,
-      customerContact: formData.get('customerContact') as string,
-      serviceChannel: formData.get('serviceChannel') as string,
-      serviceDatetime: formData.get('serviceDatetime') as string,
-      score: Number(formData.get('score')),
-      auditSummary: formData.get('auditSummary') as string,
-      positivePoints: formData.get('positivePoints') as string,
-      negativePoints: formData.get('negativePoints') as string,
+      name: formData.get('name') as string,
+      team: formData.get('team') as string,
+      mainChannel: formData.get('mainChannel') as 'chat' | 'voice',
+      status: formData.get('status') as 'ativo' | 'inativo' | 'ferias',
+      lookerId: formData.get('lookerId') as string || undefined,
     });
 
-    redirect(`/operadores/${audit.operatorId}`);
+    redirect(`/operadores/${resolvedParams.id}`);
   }
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1>Editar Auditoria de Qualidade</h1>
-        <p>Operador: <strong>{audit.operator.name}</strong></p>
+        <h1>Editar Cadastro do Operador</h1>
+        <p>Modifique as informações cadastrais de <strong>{operator.name}</strong></p>
       </div>
 
       <form action={handleSubmit} className={styles.form}>
-        <h3 className={styles.sectionTitle}>Identificação do Atendimento</h3>
+        <h3 className={styles.sectionTitle}>Dados Cadastrais</h3>
+        
+        <div className={styles.group}>
+          <label>Nome Completo</label>
+          <input type="text" name="name" defaultValue={operator.name} required className={styles.input} />
+        </div>
+
         <div className={styles.row}>
           <div className={styles.group}>
-            <label>Número da Auditoria</label>
-            <input type="text" name="auditNumber" defaultValue={audit.auditNumber} required className={styles.input} />
+            <label>Equipe / Célula</label>
+            <input type="text" name="team" defaultValue={operator.team} required className={styles.input} />
           </div>
+          
           <div className={styles.group}>
-            <label>Número do Protocolo</label>
-            <input type="text" name="protocolNumber" defaultValue={audit.protocolNumber} required className={styles.input} />
+            <label>Looker ID (Opcional)</label>
+            <input type="text" name="lookerId" defaultValue={operator.lookerId || ''} className={styles.input} />
           </div>
         </div>
 
         <div className={styles.row}>
           <div className={styles.group}>
-            <label>Contato do Cliente</label>
-            <input type="text" name="customerContact" defaultValue={audit.customerContact} required className={styles.input} />
-          </div>
-          <div className={styles.group}>
-            <label>Canal de Atendimento</label>
-            <select name="serviceChannel" defaultValue={audit.serviceChannel} required className={styles.input}>
+            <label>Canal Principal</label>
+            <select name="mainChannel" defaultValue={operator.mainChannel} required className={styles.input}>
               <option value="chat">Chat</option>
               <option value="voice">Voz</option>
             </select>
           </div>
-        </div>
 
-        <div className={styles.row}>
           <div className={styles.group}>
-            <label>Data e Hora do Atendimento</label>
-            <input type="datetime-local" name="serviceDatetime" defaultValue={formatDatetimeForInput(audit.serviceDatetime)} required className={styles.input} />
+            <label>Status Operacional</label>
+            <select name="status" defaultValue={operator.status} required className={styles.input}>
+              <option value="ativo">Ativo</option>
+              <option value="inativo">Inativo</option>
+              <option value="ferias">Férias</option>
+            </select>
           </div>
-          <div className={styles.group}>
-            <label>Nota da Auditoria (0 a 100)</label>
-            <input type="number" name="score" step="0.01" defaultValue={Number(audit.score)} required className={styles.input} />
-          </div>
-        </div>
-
-        <h3 className={styles.sectionTitle}>Avaliação Detalhada</h3>
-        <div className={styles.group}>
-          <label>Resumo da Auditoria</label>
-          <textarea name="auditSummary" defaultValue={audit.auditSummary} required className={styles.input} style={{ height: '80px' }} />
-        </div>
-        <div className={styles.group}>
-          <label>Pontos Positivos</label>
-          <textarea name="positivePoints" defaultValue={audit.positivePoints} required className={styles.input} style={{ height: '60px' }} />
-        </div>
-        <div className={styles.group}>
-          <label>Pontos Negativos / Oportunidades</label>
-          <textarea name="negativePoints" defaultValue={audit.negativePoints} required className={styles.input} style={{ height: '60px' }} />
         </div>
 
         <div className={styles.actions}>
-          <Link href={`/operadores/${audit.operatorId}`} className={styles.btnCancel}>Cancelar</Link>
-          <button type="submit" className={styles.btnSubmit}>Atualizar Auditoria</button>
+          <Link href={`/operadores/${resolvedParams.id}`} className={styles.btnCancel}>
+            Cancelar
+          </Link>
+          <button type="submit" className={styles.btnSubmit}>
+            Salvar Alterações
+          </button>
         </div>
       </form>
     </div>
