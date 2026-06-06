@@ -101,3 +101,23 @@ model AiReport {
 
   @@map("ai_reports")
 }
+
+model Goal {
+  id                String   @id @default(uuid())
+  team              String   // 'Backoffice', 'Suporte', etc.
+  startDate         DateTime @map("start_date")
+  endDate           DateTime @map("end_date")
+  
+  // Nossas réguas de corte
+  targetCsat        Decimal  @db.Decimal(5, 2) @map("target_csat")
+  targetTmaChat     Int      @map("target_tma_chat") // em segundos
+  targetTmaVoice    Int      @map("target_tma_voice") // em segundos
+  maxShortCallRate  Decimal  @db.Decimal(5, 2) @map("max_short_call_rate")
+  maxBreakOverflow  Int      @map("max_break_overflow") // em segundos
+
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  @@unique([team, startDate])
+  @@map("goals")
+}
