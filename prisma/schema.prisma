@@ -102,21 +102,41 @@ model AiReport {
   @@map("ai_reports")
 }
 
-model Goal {
-  id                String   @id @default(uuid())
-  team              String   // 'Backoffice', 'Suporte', etc.
-  startDate         DateTime @map("start_date")
-  endDate           DateTime @map("end_date")
-  
-  // Nossas réguas de corte
-  targetCsat        Decimal  @db.Decimal(5, 2) @map("target_csat")
-  targetTmaChat     Int      @map("target_tma_chat") // em segundos
-  targetTmaVoice    Int      @map("target_tma_voice") // em segundos
-  maxShortCallRate  Decimal  @db.Decimal(5, 2) @map("max_short_call_rate")
-  maxBreakOverflow  Int      @map("max_break_overflow") // em segundos
+// Atualize apenas o modelo Goal no seu prisma/schema.prisma
 
-  createdAt         DateTime @default(now()) @map("created_at")
-  updatedAt         DateTime @updatedAt @map("updated_at")
+model Goal {
+  id                    String   @id @default(uuid())
+  team                  String   // 'Backoffice', 'Suporte', etc.
+  startDate             DateTime @map("start_date")
+  endDate               DateTime @map("end_date")
+  
+  // CSAT Alvos
+  targetCsat            Decimal  @db.Decimal(5, 2) @map("target_csat")
+  targetCsatChat        Decimal? @db.Decimal(5, 2) @map("target_csat_chat")    // Novo
+  targetCsatVoice       Decimal? @db.Decimal(5, 2) @map("target_csat_voice")   // Novo
+  
+  // Convencimento Alvos
+  targetConvincement        Decimal? @db.Decimal(5, 2) @map("target_convincement")         // Novo
+  targetConvincementChat    Decimal? @db.Decimal(5, 2) @map("target_convincement_chat")    // Novo
+  targetConvincementVoice   Decimal? @db.Decimal(5, 2) @map("target_convincement_voice")   // Novo
+
+  // TMA Alvos (em segundos)
+  targetTmaChat         Int      @map("target_tma_chat")
+  targetTmaVoice        Int      @map("target_tma_voice")
+  
+  // Curtas, Inatividade e Pausa
+  maxShortCallChat      Decimal? @db.Decimal(5, 2) @map("max_short_call_chat")  // Novo
+  maxShortCallVoice     Decimal? @db.Decimal(5, 2) @map("max_short_call_voice") // Novo
+  maxShortCallRate      Decimal  @db.Decimal(5, 2) @map("max_short_call_rate")  // (Geral antigo)
+  maxInactivityRate     Decimal? @db.Decimal(5, 2) @map("max_inactivity_rate")  // Novo
+  maxBreakOverflow      Int      @map("max_break_overflow") 
+
+  // Transferências Alvos
+  maxTransferRate       Decimal? @db.Decimal(5, 2) @map("max_transfer_rate")       // Novo
+  targetTransferRetention Decimal? @db.Decimal(5, 2) @map("target_transfer_retention") // Novo
+
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
 
   @@unique([team, startDate])
   @@map("goals")
