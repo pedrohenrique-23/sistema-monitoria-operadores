@@ -1,4 +1,3 @@
-// src/app/actions/kpis.ts
 'use server';
 
 // 1. Corrigido para importação padrão (sem as chaves)
@@ -87,5 +86,71 @@ export async function createKpi(data: CreateKpiInput) {
   } catch (error) {
     console.error('Erro ao salvar KPIs:', error);
     throw new Error('Falha ao registrar os indicadores semanais.');
+  }
+}
+
+
+export interface UpdateKpiInput {
+  id: string;
+  startDate: string;
+  endDate: string;
+  csatGeneral?: number;
+  csatChat?: number;
+  csatVoice?: number;
+  convincementGeneral?: number;
+  convincementChat?: number;
+  convincementVoice?: number;
+  tmaChat?: number;
+  tmaVoice?: number;
+  shortCallChat?: number;
+  shortCallVoice?: number;
+  inactivityRate?: number;
+  breakOverflow?: number;
+  transferRate?: number;
+  transferRetention?: number;
+}
+
+export async function updateKpi(data: UpdateKpiInput) {
+  try {
+    const updated = await prisma.kpi.update({
+      where: { id: data.id },
+      data: {
+        startDate: new Date(data.startDate),
+        endDate: new Date(data.endDate),
+        csatGeneral: data.csatGeneral !== undefined ? data.csatGeneral : null,
+        csatChat: data.csatChat !== undefined ? data.csatChat : null,
+        csatVoice: data.csatVoice !== undefined ? data.csatVoice : null,
+        convincementGeneral: data.convincementGeneral !== undefined ? data.convincementGeneral : null,
+        convincementChat: data.convincementChat !== undefined ? data.convincementChat : null,
+        convincementVoice: data.convincementVoice !== undefined ? data.convincementVoice : null,
+        tmaChat: data.tmaChat !== undefined ? data.tmaChat : null,
+        tmaVoice: data.tmaVoice !== undefined ? data.tmaVoice : null,
+        shortCallChat: data.shortCallChat !== undefined ? data.shortCallChat : null,
+        shortCallVoice: data.shortCallVoice !== undefined ? data.shortCallVoice : null,
+        inactivityRate: data.inactivityRate !== undefined ? data.inactivityRate : null,
+        breakOverflow: data.breakOverflow !== undefined ? data.breakOverflow : null,
+        transferRate: data.transferRate !== undefined ? data.transferRate : null,
+        transferRetention: data.transferRetention !== undefined ? data.transferRetention : null,
+      },
+    });
+
+    revalidatePath(`/operadores/${updated.operatorId}`);
+    return updated;
+  } catch (error) {
+    console.error('Error updating KPI:', error);
+    throw new Error('Falha ao atualizar os indicadores.');
+  }
+}
+export async function deleteKpi(id: string) {
+  try {
+    const deleted = await prisma.kpi.delete({
+      where: { id },
+    });
+
+    revalidatePath(`/operadores/${deleted.operatorId}`);
+    return deleted;
+  } catch (error) {
+    console.error('Error deleting KPI:', error);
+    throw new Error('Falha ao excluir o registro de KPI.');
   }
 }

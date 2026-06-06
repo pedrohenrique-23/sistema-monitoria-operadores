@@ -7,6 +7,7 @@ import { formatDate } from '@/utils/date';
 import styles from './page.module.css';
 import AiAnalysis from './AiAnalysis';
 import DeleteButton from './DeleteButton';
+import DeleteKpiButton from './DeleteKpiButton';
 
 interface PageProps {
     params: Promise<{ id: string }>;
@@ -100,27 +101,55 @@ export default async function OperadorPerfilPage({ params }: PageProps) {
                 {operator.kpis.length === 0 ? (
                     <p className={styles.emptyMessage}>Nenhum indicador lançado para este operador até o momento.</p>
                 ) : (
-                    <div className={styles.tableWrapper}>
-                        <table className={styles.table}>
+                    <div style={{ overflowX: 'auto' }}>
+                        <table className={styles.historyTable}>
                             <thead>
                                 <tr>
                                     <th>Período</th>
-                                    <th>CSAT Geral</th>
-                                    <th>TMA Chat</th>
-                                    <th>TMA Voz</th>
-                                    <th>Short Call Chat</th>
-                                    <th>Short Call Voz</th>
+                                    <th>CSAT (G/C/V)</th>
+                                    <th>Convinc. (G/C/V)</th>
+                                    <th>TMA (Chat/Voz)</th>
+                                    <th>Short Call (C/V)</th>
+                                    <th>Inatividade</th>
+                                    <th>Estouro Pausa</th>
+                                    <th>Transf. (Taxa/Ret.)</th>
+                                    <th>Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {operator.kpis.map((kpi) => (
                                     <tr key={kpi.id}>
-                                        <td>{kpi.startDate.toLocaleDateString('pt-BR')} até {kpi.endDate.toLocaleDateString('pt-BR')}</td>
-                                        <td>{kpi.csatGeneral ? `${Number(kpi.csatGeneral)}%` : '-'}</td>
-                                        <td>{kpi.tmaChat ? secondsToTimeString(kpi.tmaChat) : '-'}</td>
-                                        <td>{kpi.tmaVoice ? secondsToTimeString(kpi.tmaVoice) : '-'}</td>
-                                        <td>{kpi.shortCallChat ? `${Number(kpi.shortCallChat)}%` : '-'}</td>
-                                        <td>{kpi.shortCallVoice ? `${Number(kpi.shortCallVoice)}%` : '-'}</td>
+                                        <td>{kpi.startDate.toLocaleDateString('pt-BR')} - {kpi.endDate.toLocaleDateString('pt-BR')}</td>
+                                        <td>
+                                            {kpi.csatGeneral ? `${Number(kpi.csatGeneral)}%` : '-'} / {' '}
+                                            {kpi.csatChat ? `${Number(kpi.csatChat)}%` : '-'} / {' '}
+                                            {kpi.csatVoice ? `${Number(kpi.csatVoice)}%` : '-'}
+                                        </td>
+                                        <td>
+                                            {kpi.convincementGeneral ? `${Number(kpi.convincementGeneral)}%` : '-'} / {' '}
+                                            {kpi.convincementChat ? `${Number(kpi.convincementChat)}%` : '-'} / {' '}
+                                            {kpi.convincementVoice ? `${Number(kpi.convincementVoice)}%` : '-'}
+                                        </td>
+                                        <td>
+                                            {kpi.tmaChat ? secondsToTimeString(kpi.tmaChat) : '-'} / {' '}
+                                            {kpi.tmaVoice ? secondsToTimeString(kpi.tmaVoice) : '-'}
+                                        </td>
+                                        <td>
+                                            {kpi.shortCallChat ? `${Number(kpi.shortCallChat)}%` : '-'} / {' '}
+                                            {kpi.shortCallVoice ? `${Number(kpi.shortCallVoice)}%` : '-'}
+                                        </td>
+                                        <td>{kpi.inactivityRate ? `${Number(kpi.inactivityRate)}%` : '-'}</td>
+                                        <td>{kpi.breakOverflow ? secondsToTimeString(kpi.breakOverflow) : '-'}</td>
+                                        <td>
+                                            {kpi.transferRate ? `${Number(kpi.transferRate)}%` : '-'} / {' '}
+                                            {kpi.transferRetention ? `${Number(kpi.transferRetention)}%` : '-'}
+                                        </td>
+                                        <td style={{ verticalAlign: 'middle' }}>
+                                            <div className={styles.tableActions}>
+                                                <Link href={`/kpis/${kpi.id}/editar`} className={styles.btnTableEdit}>Editar</Link>
+                                                <DeleteKpiButton id={kpi.id} />
+                                            </div>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>

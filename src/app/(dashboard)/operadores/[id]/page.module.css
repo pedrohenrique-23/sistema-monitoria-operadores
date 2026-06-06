@@ -261,3 +261,90 @@
   color: var(--color-border);
   font-weight: 300;
 }
+
+/* Adicione ao final de src/app/(dashboard)/operadores/[id]/page.module.css */
+
+.tableActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btnTableEdit {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-channel-chat);
+  border: 1px solid rgba(var(--color-channel-chat-rgb), 0.3); /* Usa a cor do canal chat com opacidade */
+  background-color: transparent;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: var(--transition-smooth);
+}
+
+.btnTableEdit:hover {
+  background-color: var(--color-channel-chat);
+  color: #ffffff;
+}
+
+.btnTableDelete {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-status-inactive);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  background-color: transparent;
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.btnTableDelete:hover {
+  background-color: var(--color-status-inactive);
+  color: #ffffff;
+}
+
+/* Ajustes para alinhar e espaçar a tabela de histórico de KPIs */
+
+.historyTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+}
+
+.historyTable th {
+  background-color: var(--color-bg-main);
+  color: var(--color-text-secondary);
+  font-weight: 600;
+  text-align: left; /* Garante que o título começa na esquerda */
+  padding: 0.75rem 1rem;
+  border-bottom: 2px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.historyTable td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  text-align: left; /* Alinha os dados com as barras exatamente sob os títulos */
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+/* Alinhamento específico para a última coluna (Ações) */
+.historyTable th:last-child {
+  text-align: center;
+}
+
+.historyTable td:last-child {
+  text-align: center;
+  width: 1%; /* Força a coluna de ações a ocupar apenas o espaço necessário */
+}
+
+.tableActions {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centraliza os botões dentro da célula da direita */
+  gap: 0.5rem;
+}
