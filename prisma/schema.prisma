@@ -47,8 +47,8 @@ model Kpi {
   tmaVoice              Int?     @map("tma_voice")
   
   // Short Call e Produtividade
-  shortCallChat         Int?     @map("short_call_chat")
-  shortCallVoice        Int?     @map("short_call_voice")
+  shortCallChat  Decimal? @db.Decimal(5, 2) @map("short_call_chat")
+  shortCallVoice Decimal? @db.Decimal(5, 2) @map("short_call_voice")
   inactivityRate        Decimal? @db.Decimal(5, 2) @map("inactivity_rate")
   breakOverflow         Int?     @map("break_overflow") 
   
