@@ -52,14 +52,13 @@ export default async function OperadorPerfilPage({ params }: PageProps) {
                 </div>
             </section>
 
-            {/* AÇÕES RÁPIDAS */}
             <section className={styles.quickActions}>
                 <Link href={`/operadores/${resolvedParams.id}/novo-kpi`} className={`${styles.actionButton} ${styles.btnKpi}`}>
                     Novo Indicador
                 </Link>
-                <button className={`${styles.actionButton} ${styles.btnAudit}`}>
+                <Link href={`/operadores/${resolvedParams.id}/nova-auditoria`} className={`${styles.actionButton} ${styles.btnAudit}`}>
                     Nova Auditoria
-                </button>
+                </Link>
             </section>
 
             {/* FORMULÁRIO DE OBSERVAÇÕES PERMANENTES */}

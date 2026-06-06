@@ -1,0 +1,123 @@
+/* src/app/(dashboard)/operadores/[id]/nova-auditoria/page.module.css */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.header {
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  font-size: 1.75rem;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.form {
+  background-color: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sectionTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.input, .textarea {
+  padding: 0.6rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  background-color: var(--color-bg-main);
+  outline: none;
+  font-family: var(--font-family);
+}
+
+.input:focus, .textarea:focus {
+  border-color: var(--color-text-secondary);
+  background-color: #ffffff;
+}
+
+.textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Estilização focada no Erro Crítico (Alerta Vermelho) */
+.checkboxGroup {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: rgba(239, 68, 68, 0.05);
+  padding: 1rem;
+  border: 1px dashed var(--color-status-inactive);
+  border-radius: var(--radius-md);
+}
+
+.checkboxLabel {
+  color: var(--color-status-inactive) !important;
+  font-weight: bold !important;
+  cursor: pointer;
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btnCancel {
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  transition: var(--transition-smooth);
+}
+
+.btnSubmit {
+  padding: 0.6rem 1.5rem;
+  border-radius: var(--radius-md);
+  background-color: var(--color-channel-voice);
+  color: #ffffff;
+  font-weight: bold;
+  transition: var(--transition-smooth);
+}
+
+.btnSubmit:hover {
+  opacity: 0.9;
+}
